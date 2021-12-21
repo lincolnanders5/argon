@@ -5,24 +5,34 @@ import PackageDescription
 
 let package = Package(
     name: "Argon",
+	platforms: [
+		.iOS(.v15), .macOS(.v11)
+	],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "Argon",
-            targets: ["Argon"]),
+		
+        .library(name: "Argon", targets: ["Argon"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
+		.package(name: "SerializedSwift", url: "https://github.com/dejanskledar/SerializedSwift", branch: "master"),
+		.package(name: "PublishedObject", url: "https://github.com/Amzd/PublishedObject", from: "0.2.0"),
+		
+		.package(name: "vapor", url: "https://github.com/vapor/vapor", from: "4.50.0"),
+		.package(name: "fluent", url: "https://github.com/vapor/fluent", from: "4.4.0"),
+		.package(name: "fluent-postgres-driver", url: "https://github.com/vapor/fluent-postgres-driver", from: "2.2.0"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "Argon",
-            dependencies: []),
-        .testTarget(
-            name: "ArgonTests",
-            dependencies: ["Argon"]),
+        .target(name: "Argon", dependencies: [
+			"SerializedSwift",
+			"PublishedObject" ]),
+		
+		.target(name: "ArgonServer", dependencies: [
+			"Argon",
+			.product(name: "Vapor", package: "vapor"),
+			.product(name: "Fluent", package: "fluent"),
+			.product(name: "FluentPostgresDriver", package: "fluent-postgres-driver") ]),
+        
+		.testTarget(name: "ArgonTests", dependencies: ["Argon"]),
     ]
 )
