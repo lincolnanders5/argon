@@ -15,5 +15,8 @@ open class ARModel: Serializable {
 }
 
 extension ARModel {
-	public static func routes(_ options: )
+	public static func routes(_ options: RouteOption...) {
+		var opts: [RouteOption] = options
+		if opts.isEmpty { opts.append(contentsOf: RouteOption.allCases) }
+	}
 }
