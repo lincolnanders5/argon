@@ -9,7 +9,8 @@ import Foundation
 import SerializedSwift
 
 open class ARModel: Serializable {
-	@Serialized var id: Int?
+	@Serialized("id") var arid: Int?
+	public var id: Int?
 	
 	public required init(){}
 }

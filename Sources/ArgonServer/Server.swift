@@ -15,7 +15,7 @@ open class ARServer {
 	private var routes: [ARRoute]
 	
 	public init(routes: [[ARRoute]]) {
-		self.routes = []
+		self.routes = routes.flatMap { $0 as [ARRoute] }
 	}
 	
 	public func listen() {
@@ -26,7 +26,6 @@ open class ARServer {
 				print("Server process has finished.")
 			}
 			print("Server now listening...")
-			
 			dumpRoutes()
 			try app?.run()
 		} catch {

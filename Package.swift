@@ -20,11 +20,14 @@ let package = Package(
 		.package(name: "vapor", url: "https://github.com/vapor/vapor", from: "4.50.0"),
 		.package(name: "fluent", url: "https://github.com/vapor/fluent", from: "4.4.0"),
 		.package(name: "fluent-postgres-driver", url: "https://github.com/vapor/fluent-postgres-driver", from: "2.2.0"),
+		
+		.package(name: "plural-kit", url: "https://github.com/BinaryBirds/plural-kit.git", branch: "main")
     ],
     targets: [
         .target(name: "Argon", dependencies: [
 			"SerializedSwift",
-			"PublishedObject" ]),
+			"PublishedObject",
+			.product(name: "PluralKit", package: "plural-kit") ]),
 		
 		.target(name: "ArgonServer", dependencies: [
 			"Argon",
