@@ -16,8 +16,16 @@ import Foundation
  * PATCH/PUT	/photos/:id			photos#update	update a specific photo
  * DELETE		/photos/:id			photos#destroy	delete a specific photo
  */
-public enum RouteOption: CaseIterable { case index, new, create, show, edit, update, delete }
-public enum HTTPOption : CaseIterable { case get, post, patch, delete }
+public enum RouteOption: CaseIterable {
+	case index, new, create, show, edit, update, delete
+	
+	public func toHTTPOption() -> HTTPOption {
+		RouteHTTPOption.httpOptionFor(routeOption: self)
+	}
+}
+public enum HTTPOption : CaseIterable {
+	case get, post, patch, delete
+}
 public struct RouteHTTPOption {
 	var routeOption: RouteOption
 	var httpOption:  HTTPOption

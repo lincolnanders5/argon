@@ -26,10 +26,20 @@ open class ARServer {
 				print("Server process has finished.")
 			}
 			print("Server now listening...")
+			
+			loadRoutes()
+			
 			dumpRoutes()
 			try app?.run()
 		} catch {
 			print(error)
+		}
+	}
+	
+	private func loadRoutes() {
+		guard let app = app else { return }
+		routes.forEach { route in
+			app.on(route.vaporOption, route.pathComponents(), use: route.handler)
 		}
 	}
 	
