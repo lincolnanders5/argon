@@ -17,7 +17,7 @@ let package = Package(
 		.package(name: "PublishedObject", url: "https://github.com/Amzd/PublishedObject", from: "0.2.0"),
 		
 		.package(name: "swift-nio", url: "https://github.com/apple/swift-nio", .upToNextMinor(from: "2.34.0")),
-		.package(name: "vapor", url: "https://github.com/vapor/vapor", from: "4.50.0"),
+		.package(name: "vapor", url: "https://github.com/vapor/vapor", from: "4.54.0"),
 		.package(name: "fluent", url: "https://github.com/vapor/fluent", from: "4.4.0"),
 		.package(name: "fluent-postgres-driver", url: "https://github.com/vapor/fluent-postgres-driver", from: "2.2.0"),
 		

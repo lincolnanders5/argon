@@ -9,6 +9,7 @@ import AppKit
 import Foundation
 import Argon
 import Vapor
+import Fluent
 
 open class ARServer {
 	private var app: Application?
@@ -16,30 +17,24 @@ open class ARServer {
 	
 	public init(routes: [[ARRoute]]) {
 		self.routes = routes.flatMap { $0 as [ARRoute] }
+		
+		app = try! Application(.detect())
+		loadRoutes()
 	}
 	
 	public func listen() {
+		print("Server now listening...")
 		do {
-			app = try Application(.detect())
-			defer {
-				app?.shutdown()
-				print("Server process has finished.")
-			}
-			print("Server now listening...")
-			
-			loadRoutes()
-			
-			dumpRoutes()
+			defer { app?.shutdown() }
 			try app?.run()
-		} catch {
-			print(error)
-		}
+		} catch { print(error) }
 	}
 	
 	private func loadRoutes() {
 		guard let app = app else { return }
 		routes.forEach { route in
-			app.on(route.vaporOption, route.pathComponents(), use: route.handler)
+			print(route.option, route.handeler(route.option))
+			app.on(route.vaporOption, route.pathComponents(), use: route.handeler(route.option))
 		}
 	}
 	
@@ -49,5 +44,10 @@ open class ARServer {
 		app.routes.all.forEach { route in
 			print("\(route.method.string)   \(route.path.string)")
 		}
+	}
+	
+	public func config(_ closure: (ARServer, Application?) -> Void) -> ARServer {
+		closure(self, app)
+		return self
 	}
 }

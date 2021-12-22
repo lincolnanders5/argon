@@ -1,6 +1,14 @@
 public struct ARRoute {
 	public var option: RouteOption
 	public var levels: [ARModel.Type]
+	public var handelers: [RouteOption: (CustomStringConvertible) -> String] = [
+		.index : { _ in "Index"  },
+		.edit  : { _ in "Edit"   },
+		.new   : { _ in "New" 	 },
+		.update: { _ in "Update" },
+		.delete: { _ in "Delete" },
+		.create: { _ in "Create" }
+	]
 	
 	public init(option: RouteOption, levels: [ARModel.Type]) {
 		self.option = option
