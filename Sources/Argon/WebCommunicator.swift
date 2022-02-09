@@ -17,6 +17,7 @@ public final class WebCommunicator {
     }
     
     public static func sendRequest<T: Decodable>(url: String, option: HTTPOption) async -> T? {
+        Logger.wc.log.info("starting fetch to \(url) as type \(String(describing: T.self))")
         guard let urlMir = URL(string: url) else { return nil }
         var req = URLRequest(url: urlMir, cachePolicy: .reloadIgnoringLocalCacheData)
         req.httpMethod = option.rawValue

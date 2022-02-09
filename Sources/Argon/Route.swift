@@ -1,9 +1,9 @@
 public struct ARRoute {
 	public var option: RouteOption
-	public var levels: [ARModel.Type]
+	public var levels: [ARModelObject.Type]
 	public var handelers: [RouteOption: (CustomStringConvertible) async -> String] = [:]
 	
-	public init(option: RouteOption, levels: [ARModel.Type]) {
+	public init(option: RouteOption, levels: [ARModelObject.Type]) {
 		self.option = option
 		self.levels = levels
 	}
@@ -26,7 +26,7 @@ public struct ARRoute {
 }
 
 // Object Route Generation
-extension ARModel {
+extension ARModelObject {
 	public static func routes(_ options: RouteOption...) -> [ARRoute] {
 		var opts: [RouteOption] = options
 		if opts.isEmpty { opts.append(contentsOf: RouteOption.allCases) }

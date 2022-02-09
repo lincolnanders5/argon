@@ -40,8 +40,10 @@ public class ARListView<T: ARModel, Content> where Content : View  {
 }
 
 import SerializedSwift
-final class Post: ARModel {
+final class Post: ARModel {    
+    static var baseURL = "https://jsonplaceholder.typicode.com/posts"
     static var all: [Post]?
+    
     @Serialized var userId: String
     @Serialized var title:  String
     @Serialized var body:   String

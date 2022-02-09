@@ -10,7 +10,7 @@ import SerializedSwift
 import PluralKit
 import os.log
 
-open class ARModel: Serializable, ObservableObject, Identifiable {
+open class ARModelObject: Serializable, ObservableObject, Identifiable {
 	@Serialized("id") private var arid: Int?
 	public var id: Int {
 		get { arid ?? -1 }
@@ -30,16 +30,24 @@ open class ARModel: Serializable, ObservableObject, Identifiable {
 	}
 }
 
-extension ARModel {
+public protocol Based { static var baseURL: String { get } }
+public typealias ARModel = ARModelObject & Based
+
+extension ARModelObject {
     public static func fetch<T: ARModel>(record: inout T?, id: Int? = nil) async -> T? {
-        let r: T? = await WebCommunicator.sendRequest(url: "http://192.168.1.151:3000/notifications/\(id).json", option: .get)
+        guard let id = record?.id ?? id else {
+            Logger.arm.log.error("Attempted to fetch into \(String(describing: T.self)) without providing an ID")
+            return nil
+        }
+        
+        let r: T? = await WebCommunicator.sendRequest(url: "\(T.baseURL)/\(id).json", option: .get)
         Logger.arm.log.info("fetch<record>->T? Fetched record [\(r?.id ?? 0)] found")
         return r
     }
     public static func fetchInto<T: ARModel>(_ array: inout [T]?) async {
-        let c = array?.count ?? 0
-        Logger.arm.log.info("fetchInto<array>->[T]? Finished, \(c) items found")
-        array = await WebCommunicator.sendRequest(url: "https://jsonplaceholder.typicode.com/posts", option: .get)
+        array = await WebCommunicator.sendRequest(url: T.baseURL + ".json", option: .get)
+        let n = array?.count ?? 0
+        Logger.arm.log.info("fetchInto<array>->[T]? Finished, \(n) item(s) found")
     }
 }
 
