@@ -33,8 +33,9 @@ open class ARServer {
 	private func loadRoutes() {
 		guard let app = app else { return }
 		routes.forEach { route in
-			print(route.option, route.handeler(route.option))
-			app.on(route.vaporOption, route.pathComponents(), use: route.handeler(route.option))
+			app.on(route.vaporOption,
+				   route.pathComponents(),
+				   use: route.handler())
 		}
 	}
 	

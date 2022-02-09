@@ -1,14 +1,7 @@
 public struct ARRoute {
 	public var option: RouteOption
 	public var levels: [ARModel.Type]
-	public var handelers: [RouteOption: (CustomStringConvertible) -> String] = [
-		.index : { _ in "Index"  },
-		.edit  : { _ in "Edit"   },
-		.new   : { _ in "New" 	 },
-		.update: { _ in "Update" },
-		.delete: { _ in "Delete" },
-		.create: { _ in "Create" }
-	]
+	public var handelers: [RouteOption: (CustomStringConvertible) async -> String] = [:]
 	
 	public init(option: RouteOption, levels: [ARModel.Type]) {
 		self.option = option
@@ -29,8 +22,7 @@ public struct ARRoute {
 		if option == .edit { parts.append("edit") }
 		if option == .new  { parts.append("new")  }
 		
-		return parts
-	}
+		return parts	}
 }
 
 // Object Route Generation

@@ -23,9 +23,13 @@ public enum RouteOption: CaseIterable {
 		RouteHTTPOption.httpOptionFor(routeOption: self)
 	}
 }
-public enum HTTPOption : CaseIterable {
+
+/// Different HTTP request options
+/// Possible values: `.get`, `.post`, `.patch`, `.delete`
+public enum HTTPOption : String, CaseIterable {
 	case get, post, patch, delete
 }
+
 public struct RouteHTTPOption {
 	var routeOption: RouteOption
 	var httpOption:  HTTPOption

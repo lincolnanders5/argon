@@ -9,6 +9,8 @@ import Foundation
 import Argon
 import Vapor
 
+typealias AsyncRequestHandeler = (Request) async throws -> String
+
 extension ARRoute {
 	var vaporOption: Vapor.HTTPMethod {
 		switch (self.option.toHTTPOption()) {
@@ -19,13 +21,23 @@ extension ARRoute {
 		}
 	}
 	
-	func handeler(_ option: RouteOption) -> (Request) throws -> String {
-		guard let handeler = handelers[option] else { return defaultHandler }
-		return handeler as (Request) -> String
+	func handler(_ option: RouteOption) -> AsyncRequestHandeler {
+		guard let handeler = handelers[option] else {
+			switch (option) {
+			case .index: return { req async throws in
+				let all = try await levels[0].query(on: req.db).all()
+				print(all)
+				return "index2"
+			}
+			default: break
+			}
+			return defaultHandler()
+		}
+		return handeler as AsyncRequestHandeler
 	}
 	
-	func defaultHandler(req: (Request)) throws -> String {
-		"Hello, World"
+	func defaultHandler() -> AsyncRequestHandeler {
+		return { _ in "Hello, World" }
 	}
 	
 	public func pathComponents() -> [PathComponent] {
