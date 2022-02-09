@@ -6,32 +6,36 @@
 //
 
 import SwiftUI
+import PublishedObject
+import os.log
 
-public struct ARListView<T: ARModel, Content> where Content : View  {
+public class ARListView<T: ARModel, Content> where Content : View  {
     @State var items: [T]?
-    @State var error: String?
-    var modifiers: (T) -> Content
+    var modifier: (T) -> Content
+    var action  : Optional<() async -> Void>
     
-    public init(_ dest: inout [T]?, @ViewBuilder _ content: @escaping (T) -> Content) {
-        modifiers = content
+    public init(_ items: [T]?,
+                @ViewBuilder content modifier: @escaping (T) -> Content,
+                populate action: @escaping @Sendable () async -> Void)
+    {
+        self.items    = items
+        self.modifier = modifier
+        self.action   = action
     }
     
-    func loadBody() async {
-        items = await WebCommunicator.sendRequest(url: "http://192.168.1.151:3000/notifications.json", option: .get)
+    public init(_ items: [T]?, @ViewBuilder
+                _ modifier: @escaping (T) -> Content)
+    {
+        self.items    = items
+        self.modifier = modifier
+        self.action   = nil
     }
     
     public var body: some View {
-        ZStack {
-            if items == nil {
-                Text("Searching for notifications...")
-                    .task { await loadBody() }
-            } else if items!.count == 0 {
-                Text("No notifications found.")
-            } else {
-                List(items ?? [T]()) { modifiers($0) }
-                .refreshable { await loadBody() }
-            }
-        }
+        ZStack { // NOTE: This cannot be reduced to `List.refreshable.task`
+            List(items ?? [T]()) { self.modifier($0) }
+                .refreshable { await self.action?() }
+        }.task { await self.action?() }
     }
 }
 

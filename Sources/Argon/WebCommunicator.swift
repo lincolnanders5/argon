@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os.log
 
 public final class WebCommunicator {
     static var session = URLSession.shared
@@ -26,24 +27,13 @@ public final class WebCommunicator {
         do {
             let (data, _) = try await session.data(from: urlMir)
             let decoder = JSONDecoder()
-            return try decoder.decode(T.self, from: data)
+            let res = try decoder.decode(T.self, from: data)
+            Logger.wc.log.info("fetched from \(url)")
+            return res
         } catch {
             print(error)
             return nil
         }
     }
-    
-    public static func request<T: ARModel>(format: RouteOption) async -> T? {
-        return nil
-    }
-    public static func request<T: ARModel>(format: RouteOption) async -> [T]? {
-        await WebCommunicator.sendRequest(url: "http://192.168.1.151:3000/notifications.json", option: .get)
-    }
-    
-    public static func fetch<T: ARModel>(record: inout T?) async {
-        record = await request(format: .show)
-    }
-    public static func fetch<T: ARModel>(array: inout [T]?) async {
-        array = await request(format: .index)
-    }
 }
+
