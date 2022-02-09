@@ -10,6 +10,7 @@ import Foundation
 import Argon
 import Vapor
 import Fluent
+import os.log
 
 open class ARServer {
 	private var app: Application?
@@ -23,19 +24,23 @@ open class ARServer {
 	}
 	
 	public func listen() {
-		print("Server now listening...")
+        Logger.s.log.info("Server now listening...")
 		do {
-			defer { app?.shutdown() }
+			defer {
+                Logger.s.log.info("Server shutting down.")
+                app?.shutdown()
+            }
 			try app?.run()
-		} catch { print(error) }
+        } catch { Logger.s.log.error("error: \(error.localizedDescription)") }
 	}
 	
 	private func loadRoutes() {
 		guard let app = app else { return }
 		routes.forEach { route in
+            Logger.s.log.info("\(route.vaporOption.rawValue) -> \(String(describing: route.option)) \(route.pathComponents().joined(separator: "/"))")
 			app.on(route.vaporOption,
 				   route.pathComponents(),
-				   use: route.handler())
+                   use: route.handler(route.option))
 		}
 	}
 	

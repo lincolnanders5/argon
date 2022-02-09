@@ -9,7 +9,7 @@ import SwiftUI
 import PublishedObject
 import os.log
 
-public class ARListView<T: ARModel, Content> where Content : View  {
+public class ARList<T: ARModel, Content> where Content : View  {
     @State var items: [T]?
     var modifier: (T) -> Content
     var action  : Optional<() async -> Void>
@@ -48,9 +48,10 @@ final class Post: ARModel {
     @Serialized var title:  String
     @Serialized var body:   String
 }
+
 struct ARListView_Previews: PreviewProvider {
     static var previews: some View {
-        ARListView(Post.all, content: { post in
+        ARList(Post.all, content: { post in
             VStack(alignment: .leading) {
                 Text(post.title)
                     .fontWeight(.bold)

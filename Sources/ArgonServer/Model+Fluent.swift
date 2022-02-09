@@ -9,7 +9,11 @@ import Foundation
 import Argon
 import Fluent
 
-extension ARModel: Model {
+extension ARModelObject: Model {
+    public var id: Int? {
+        get { arid }
+        set(newValue) { arid = newValue }
+    }
 	public typealias IDValue = Int
 	public static var schema: String { modelName }
 }

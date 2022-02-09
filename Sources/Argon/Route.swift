@@ -22,7 +22,8 @@ public struct ARRoute {
 		if option == .edit { parts.append("edit") }
 		if option == .new  { parts.append("new")  }
 		
-		return parts	}
+		return parts
+    }
 }
 
 // Object Route Generation

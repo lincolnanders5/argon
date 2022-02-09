@@ -11,7 +11,7 @@ import PluralKit
 import os.log
 
 open class ARModelObject: Serializable, ObservableObject, Identifiable {
-	@Serialized("id") private var arid: Int?
+	@Serialized("id") public var arid: Int?
 	public var id: Int {
 		get { arid ?? -1 }
 		set { arid = newValue }
@@ -45,7 +45,10 @@ extension ARModelObject {
         return r
     }
     public static func fetchInto<T: ARModel>(_ array: inout [T]?) async {
-        array = await WebCommunicator.sendRequest(url: T.baseURL + ".json", option: .get)
+        let url = T.baseURL
+        // (T.baseURL.contains(".json")) ? T.baseURL : T.baseURL + ".json"
+        
+        array = await WebCommunicator.sendRequest(url: url, option: .get)
         let n = array?.count ?? 0
         Logger.arm.log.info("fetchInto<array>->[T]? Finished, \(n) item(s) found")
     }

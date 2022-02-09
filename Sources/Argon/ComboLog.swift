@@ -9,19 +9,19 @@ import Foundation
 import os.log
 import os.signpost
 
-struct ComboLog {
-    private static var subsystem = Bundle.main.bundleIdentifier!
-    var log: Logger
-    var signpost: OSLog
+public struct ComboLog {
+    private static var subsystem = Bundle.main.bundleIdentifier ?? "com.local.subsystem"
+    public var log: Logger
+    public var signpost: OSLog
     var category: String
     
-    init(category: String) {
+    public init(category: String) {
         self.category = category
         log = Logger(subsystem: ComboLog.subsystem, category: category)
         signpost = OSLog(subsystem: ComboLog.subsystem, category: category + "-signpost")
     }
     
-    func time(_ body: @escaping () async -> Void) {
+    public func time(_ body: @escaping () async -> Void) {
         let signpostID = OSSignpostID(log: signpost)
         let idstr = String(describing: signpostID.rawValue)
         os_signpost(.begin, log: signpost, name: "Logger Timer",
