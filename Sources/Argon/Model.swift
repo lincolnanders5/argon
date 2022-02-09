@@ -39,7 +39,7 @@ extension ARModel {
     public static func fetchInto<T: ARModel>(_ array: inout [T]?) async {
         let c = array?.count ?? 0
         Logger.arm.log.info("fetchInto<array>->[T]? Finished, \(c) items found")
-        array = await WebCommunicator.sendRequest(url: "http://192.168.1.151:3000/notifications.json", option: .get)
+        array = await WebCommunicator.sendRequest(url: "https://jsonplaceholder.typicode.com/posts", option: .get)
     }
 }
 

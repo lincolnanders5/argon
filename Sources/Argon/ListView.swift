@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  ListView.swift
 //  
 //
 //  Created by Lincoln Anders on 2/7/22.
@@ -39,8 +39,24 @@ public class ARListView<T: ARModel, Content> where Content : View  {
     }
 }
 
-//struct ARListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ARListView()
-//    }
-//}
+import SerializedSwift
+final class Post: ARModel {
+    static var all: [Post]?
+    @Serialized var userId: String
+    @Serialized var title:  String
+    @Serialized var body:   String
+}
+struct ARListView_Previews: PreviewProvider {
+    static var previews: some View {
+        ARListView(Post.all, content: { post in
+            VStack(alignment: .leading) {
+                Text(post.title)
+                    .fontWeight(.bold)
+                    .lineLimit(1)
+                Text(post.body)
+                    .fontWeight(.light)
+                    .lineLimit(1)
+            }
+        }, populate: { await Post.fetchInto(&Post.all) }).body
+    }
+}
